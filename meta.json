@@ -15,7 +15,7 @@
   "entrypoint": "bin/mux-scale",
   "first_run": "",
   "build": {
-    "build": "mise r build-module",
+    "build": "make module.tar.gz",
     "setup": "",
     "path": "module.tar.gz",
     "arch": ["linux/amd64", "linux/arm64"]
