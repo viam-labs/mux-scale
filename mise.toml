@@ -3,6 +3,19 @@ go = "1.27"
 golangci-lint = "2.14.0"
 gotestsum = "1.13.0"
 
+[tools."http:viam"]
+bin = "viam"
+version = "latest"
+version_order = 'semver'
+version_list_url = 'https://api.github.com/repos/viamrobotics/rdk/releases'
+version_json_path = '.[].tag_name'
+platforms = {
+	linux-x64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-arm64' },
+	linux-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-amd64' },
+	macos-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-darwin-arm64' },
+}
+
+
 [vars]
 bin = './bin/mux-scale'
 
