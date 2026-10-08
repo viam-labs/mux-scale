@@ -1,0 +1,23 @@
+{
+  "$schema": "https://dl.viam.dev/module.schema.json",
+  "module_id": "viam-labs:mux-scale",
+  "visibility": "private",
+  "url": "https://github.com/viam-labs/mux-scale",
+  "description": "Read SparkFun Qwiic Scale (NAU7802) load cells, individually or several behind a Qwiic I2C mux.",
+  "models": [
+    {
+      "api": "rdk:component:sensor",
+      "model": "viam-labs:mux-scale:nau7802",
+      "markdown_link": "README.md#model-viam-labsmux-scalenau7802",
+      "short_description": "NAU7802 load cell amplifier, optionally behind a TCA9548A I2C multiplexer channel."
+    }
+  ],
+  "entrypoint": "bin/mux-scale",
+  "first_run": "",
+  "build": {
+    "build": "make module.tar.gz",
+    "setup": "",
+    "path": "module.tar.gz",
+    "arch": ["linux/amd64", "linux/arm64"]
+  }
+}
