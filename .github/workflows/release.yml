@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      MISE_GO_SET_GOROOT: false
+    steps:
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Build amd64
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          mise r -f build-module
+          cp module.tar.gz module-linux-amd64.tar.gz
+      - name: Build arm64
+        env:
+          GOOS: linux
+          GOARCH: arm64
+        run: |
+          mise r -f build-module
+          cp module.tar.gz module-linux-arm64.tar.gz
+      - name: Upload
+        run: |
+          viam login api-key --key-id ${{ secrets.viam_key_id }} --key ${{ secrets.viam_key_value }}
+          viam module upload --module viam:mux-scale --version ${{ github.ref_name }} --platform linux/amd64 module-linux-amd64.tar.gz
+          viam module upload --module viam:mux-scale --version ${{ github.ref_name }} --platform linux/arm64 module-linux-arm64.tar.gz
