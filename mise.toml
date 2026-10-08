@@ -1,0 +1,28 @@
+[tools]
+go = "1.27"
+golangci-lint = "2.14.0"
+gotestsum = "1.13.0"
+
+[vars]
+bin = './bin/mux-scale'
+
+[tasks.lint]
+run = 'golangci-lint run'
+
+[tasks.test]
+run = 'gotestsum -- -race -count=1 ./...'
+
+[tasks.build]
+env = { CGO_ENABLED = '0' }
+sources = ['go.mod', 'go.sum', '**/*.go']
+outputs = ['{{ vars.bin }}']
+run = 'go build -o {{ vars.bin }} ./cmd/module'
+
+[tasks.build-module]
+depends = ['build']
+sources = ['{{ vars.bin }}', 'meta.json']
+outputs = ['module.tar.gz']
+run = 'tar czf module.tar.gz {{ vars.bin }} meta.json'
+
+[tasks.clean]
+run = 'rm -rf bin module.tar.gz'
