@@ -14,10 +14,9 @@ import (
 	"github.com/viam-labs/mux-scale/nau7802"
 )
 
-// The model triplet is a placeholder until the module is published; change it
-// here and in meta.json together.
+// The model triplet must match meta.json.
 const (
-	namespace = "viam-labs"
+	namespace = "viam"
 	family    = "mux-scale"
 	modelName = "nau7802"
 )

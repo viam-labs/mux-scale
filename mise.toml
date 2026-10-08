@@ -4,18 +4,18 @@ golangci-lint = "2.14.0"
 gotestsum = "1.13.0"
 
 [tools."http:viam"]
+platforms = {
+	linux-x64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-amd64' },
+linux-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-arm64' },
+macos-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-darwin-arm64' },
+}
+
+
 bin = "viam"
 version = "latest"
 version_order = 'semver'
 version_list_url = 'https://api.github.com/repos/viamrobotics/rdk/releases'
 version_json_path = '.[].tag_name'
-platforms = {
-	linux-x64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-arm64' },
-	linux-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-linux-amd64' },
-	macos-arm64 = { url = 'https://storage.googleapis.com/packages.viam.com/apps/viam-cli/viam-cli-v{{ version }}-darwin-arm64' },
-}
-
-
 [vars]
 bin = './bin/mux-scale'
 
@@ -27,7 +27,7 @@ run = 'gotestsum -- -race -count=1 ./...'
 
 [tasks.build]
 env = { CGO_ENABLED = '0' }
-sources = ['go.mod', 'go.sum', '**/*.go']
+sources = ['**/*.go', 'go.mod', 'go.sum']
 outputs = ['{{ vars.bin }}']
 run = 'go build -o {{ vars.bin }} ./cmd/module'
 

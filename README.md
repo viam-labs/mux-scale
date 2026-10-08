@@ -10,9 +10,6 @@ scale appears as its own Viam sensor component.
 
 I2C access uses [periph.io](https://periph.io) on Linux.
 
-> The `viam-labs:mux-scale` namespace is a placeholder until the module is
-> published. It is defined once in `muxscale/config.go` and `meta.json`.
-
 ## Wiring
 
 ```
@@ -25,7 +22,7 @@ A single scale may also be connected directly to the bus; omit the mux
 attributes in that case. Up to eight muxes (0x70–0x77) may share one bus. The
 NAU7802 DRDY pin is not used; the module polls the conversion-ready flag.
 
-## Model viam-labs:mux-scale:nau7802
+## Model viam:mux-scale:nau7802
 
 One component per load cell. Components on the same bus share a single bus
 handle inside the module; the bus is held only for the few microseconds of
@@ -58,13 +55,13 @@ A reading takes about `samples / sample_rate` seconds (100 ms by default).
     {
       "name": "cell0",
       "api": "rdk:component:sensor",
-      "model": "viam-labs:mux-scale:nau7802",
+      "model": "viam:mux-scale:nau7802",
       "attributes": { "i2c_bus": "1", "mux_channel": 0 }
     },
     {
       "name": "cell1",
       "api": "rdk:component:sensor",
-      "model": "viam-labs:mux-scale:nau7802",
+      "model": "viam:mux-scale:nau7802",
       "attributes": {
         "i2c_bus": "1",
         "mux_channel": 1,
@@ -114,18 +111,21 @@ warning, and sets the flag. `{"reset": true}` retries it.
 
 ## Development
 
+Tooling is pinned with [mise](https://mise.jdx.dev); `mise install` fetches
+Go, golangci-lint, gotestsum and the Viam CLI.
+
 ```sh
-make lint          # go vet (+ golangci-lint when installed)
-make test          # go test -race ./...
-make build         # bin/mux-scale (CGO_ENABLED=0)
-make module.tar.gz # package for `viam module upload`
+mise r lint          # golangci-lint
+mise r test          # gotestsum -- -race ./...
+mise r build         # bin/mux-scale (CGO_ENABLED=0)
+mise r build-module  # module.tar.gz for `viam module upload`
 ```
 
-Nushell equivalents:
+Set `GOOS`/`GOARCH` to cross-build, e.g. `GOOS=linux GOARCH=arm64 mise r -f build-module`
+(nu: `with-env {GOOS: linux, GOARCH: arm64} { mise r -f build-module }`).
 
-```nu
-make lint; make test; make build
-```
+Pushing a tag builds linux/amd64 and linux/arm64 and uploads both to the
+registry as that version.
 
 The driver (`nau7802/`) is hardware-independent and unit-tested against an
 in-memory register emulation (`nau7802/nau7802test`); the mux and bus logic is
