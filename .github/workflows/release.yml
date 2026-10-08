@@ -33,5 +33,5 @@ jobs:
       - name: Upload
         run: |
           viam login api-key --key-id ${{ secrets.VIAM_DEV_API_KEY_ID }} --key ${{ secrets.VIAM_DEV_API_KEY }}
-          viam module upload --module viam:mux-scale --version ${{ github.ref_name }} --platform linux/amd64 module-linux-amd64.tar.gz
-          viam module upload --module viam:mux-scale --version ${{ github.ref_name }} --platform linux/arm64 module-linux-arm64.tar.gz
+          viam module upload --version ${{ github.ref_name }} --platform linux/amd64 module-linux-amd64.tar.gz
+          viam module upload --version ${{ github.ref_name }} --platform linux/arm64 module-linux-arm64.tar.gz
